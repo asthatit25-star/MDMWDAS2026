@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grade Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .container {
+            width: 450px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .title h1 {
+            margin: 0;
+            color: #4f46e5;
+            font-size: 30px;
+        }
+
+        .title p {
+            color: #777;
+            margin-top: 8px;
+        }
+
+        .student-name {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.25);
+        }
+
+        .subject {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .subject-maths {
+            background: #fff1f2;
+            border-left: 6px solid #f43f5e;
+        }
+
+        .subject-physics {
+            background: #eff6ff;
+            border-left: 6px solid #3b82f6;
+        }
+
+        .subject-chemistry {
+            background: #f0fdf4;
+            border-left: 6px solid #22c55e;
+        }
+
+        .subject-computer {
+            background: #f5f3ff;
+            border-left: 6px solid #8b5cf6;
+        }
+
+        .subject-english {
+            background: #fffbeb;
+            border-left: 6px solid #f59e0b;
+        }
+
+        .subject label {
+            margin-bottom: 7px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(99, 102, 241, 0.4);
+        }
+
+        #error {
+            color: #dc2626;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        #result {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ecfdf5, #eff6ff);
+            border: 2px solid #a7f3d0;
+        }
+
+        #result h2 {
+            text-align: center;
+            color: #059669;
+            margin-top: 0;
+        }
+
+        .result-item {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        #gradeResult {
+            font-size: 24px;
+            font-weight: bold;
+            color: #7c3aed;
+        }
+
+        .grade-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="title">
+        <h1>🎓 Student Grade Calculator</h1>
+        <p>Enter your marks and check your result</p>
+    </div>
+
+    <!-- Student Name -->
+    <div class="student-name">
+        <label>👤 Student Name</label>
+        <input type="text" id="name" placeholder="Enter your name">
+    </div>
+
+    <!-- Mathematics -->
+    <div class="subject subject-maths">
+        <label>📐 Mathematics</label>
+        <input type="number" id="maths" placeholder="Enter marks (0-100)">
+    </div>
+
+    <!-- Physics -->
+    <div class="subject subject-physics">
+        <label>⚡ Physics</label>
+        <input type="number" id="physics" placeholder="Enter marks (0-100)">
+    </div>
+
+    <!-- Chemistry -->
+    <div class="subject subject-chemistry">
+        <label>🧪 Chemistry</label>
+        <input type="number" id="chemistry" placeholder="Enter marks (0-100)">
+    </div>
+
+    <!-- Computer Science -->
+    <div class="subject subject-computer">
+        <label>💻 Computer Science</label>
+        <input type="number" id="computer" placeholder="Enter marks (0-100)">
+    </div>
+
+    <!-- English -->
+    <div class="subject subject-english">
+        <label>📚 English</label>
+        <input type="number" id="english" placeholder="Enter marks (0-100)">
+    </div>
+
+    <button onclick="calculateGrade()">
+        ✨ Calculate Result
+    </button>
+
+    <p id="error"></p>
+
+    <!-- Result -->
+    <div id="result">
+
+        <h2>📊 Your Result</h2>
+
+        <div class="result-item">
+            <b>Student:</b>
+            <span id="studentResult"></span>
+        </div>
+
+        <div class="result-item">
+            <b>Total Marks:</b>
+            <span id="totalResult"></span>
+        </div>
+
+        <div class="result-item">
+            <b>Percentage:</b>
+            <span id="percentageResult"></span>
+        </div>
+
+        <div class="result-item">
+            <b>Grade:</b>
+            <div id="gradeResult"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function calculateGrade() {
+
+    // Get student name
+    let name = document.getElementById("name").value.trim();
+
+    // Get marks using parseFloat()
+    let maths = parseFloat(document.getElementById("maths").value);
+    let physics = parseFloat(document.getElementById("physics").value);
+    let chemistry = parseFloat(document.getElementById("chemistry").value);
+    let computer = parseFloat(document.getElementById("computer").value);
+    let english = parseFloat(document.getElementById("english").value);
+
+    let error = document.getElementById("error");
+    let result = document.getElementById("result");
+
+    // Validation
+    if (
+        name === "" ||
+        isNaN(maths) ||
+        isNaN(physics) ||
+        isNaN(chemistry) ||
+        isNaN(computer) ||
+        isNaN(english)
+    ) {
+        error.innerHTML = "⚠️ Please enter all details.";
+        result.style.display = "none";
+        return;
+    }
+
+    // Check marks
+    if (
+        maths < 0 || maths > 100 ||
+        physics < 0 || physics > 100 ||
+        chemistry < 0 || chemistry > 100 ||
+        computer < 0 || computer > 100 ||
+        english < 0 || english > 100
+    ) {
+        error.innerHTML = "⚠️ Marks must be between 0 and 100.";
+        result.style.display = "none";
+        return;
+    }
+
+    error.innerHTML = "";
+
+    // Calculate total
+    let total = maths + physics + chemistry + computer + english;
+
+    // Calculate percentage
+    let percentage = total / 5;
+
+    // Calculate grade
+    let grade;
+
+    if (percentage >= 90) {
+        grade = "A+ 🏆";
+    }
+    else if (percentage >= 80) {
+        grade = "A 🥇";
+    }
+    else if (percentage >= 70) {
+        grade = "B 🥈";
+    }
+    else if (percentage >= 60) {
+        grade = "C 🥉";
+    }
+    else if (percentage >= 50) {
+        grade = "D 👍";
+    }
+    else {
+        grade = "F ❌";
+    }
+
+    // Display result
+    document.getElementById("studentResult").innerHTML = name;
+
+    document.getElementById("totalResult").innerHTML =
+        total + " / 500";
+
+    document.getElementById("percentageResult").innerHTML =
+        percentage.toFixed(2) + "%";
+
+    document.getElementById("gradeResult").innerHTML =
+        '<span class="grade-badge">' + grade + '</span>';
+
+    result.style.display = "block";
+}
+
+</script>
+
+</body>
+</html>
