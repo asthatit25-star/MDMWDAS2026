@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Savoria — Food Menu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Georgia', 'serif'],
+            sans: ['Inter', 'ui-sans-serif', 'system-ui']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-stone-50 text-stone-900 antialiased">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 border-b border-stone-200/80 bg-stone-50/95 backdrop-blur">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+      <a href="#" class="text-2xl font-bold tracking-tight">
+        Savor<span class="text-orange-600">ia</span>
+      </a>
+
+      <div class="hidden items-center gap-8 text-sm font-medium md:flex">
+        <a href="#menu" class="transition hover:text-orange-600">Menu</a>
+        <a href="#story" class="transition hover:text-orange-600">Our Story</a>
+        <a href="#contact" class="transition hover:text-orange-600">Contact</a>
+      </div>
+
+      <a href="#menu"
+         class="rounded-full bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600">
+        Explore Menu
+      </a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="mx-auto grid max-w-7xl items-center gap-10 px-5 py-16 lg:grid-cols-2 lg:px-8 lg:py-24">
+    <div>
+      <span class="inline-flex items-center rounded-full bg-orange-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-orange-700">
+        Fresh · Local · Loved
+      </span>
+
+      <h1 class="mt-6 max-w-2xl font-display text-5xl font-bold leading-tight tracking-tight sm:text-6xl">
+        Food worth
+        <span class="text-orange-600">coming back for.</span>
+      </h1>
+
+      <p class="mt-6 max-w-xl text-lg leading-8 text-stone-600">
+        Discover our most-loved dishes, made with fresh ingredients and served
+        with a little extra heart.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#menu"
+           class="rounded-full bg-orange-600 px-6 py-3 font-semibold text-white shadow-lg shadow-orange-600/20 transition hover:-translate-y-0.5 hover:bg-orange-700">
+          View Popular Dishes
+        </a>
+        <a href="#story"
+           class="rounded-full border border-stone-300 bg-white px-6 py-3 font-semibold transition hover:border-stone-900">
+          Our Story
+        </a>
+      </div>
+
+      <div class="mt-10 flex gap-8 border-t border-stone-200 pt-6">
+        <div>
+          <p class="text-2xl font-bold">4.9/5</p>
+          <p class="text-sm text-stone-500">Guest rating</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold">25+</p>
+          <p class="text-sm text-stone-500">Signature dishes</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold">100%</p>
+          <p class="text-sm text-stone-500">Fresh daily</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -inset-4 -z-10 rounded-[2rem] bg-orange-100 blur-2xl"></div>
+      <img
+        src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=85"
+        alt="Beautifully plated restaurant dishes"
+        class="aspect-[4/3] w-full rounded-[2rem] object-cover shadow-2xl transition duration-500 hover:scale-[1.01]"
+      />
+      <div class="absolute bottom-5 left-5 rounded-2xl bg-white/95 p-4 shadow-xl backdrop-blur">
+        <p class="text-xs font-bold uppercase tracking-wider text-orange-600">Chef's pick</p>
+        <p class="mt-1 font-display text-xl font-bold">Truffle Mushroom Pasta</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <main id="menu" class="bg-white">
+    <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+      <div class="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.2em] text-orange-600">Our menu</p>
+          <h2 class="mt-2 font-display text-4xl font-bold tracking-tight sm:text-5xl">
+            Popular dishes
+          </h2>
+        </div>
+        <p class="max-w-md text-sm leading-6 text-stone-500">
+          A hand-picked collection of guest favorites. Every card uses a
+          responsive CSS Grid layout and Tailwind utility classes.
+        </p>
+      </div>
+
+      <!-- Responsive Tailwind Grid -->
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- Card 1 -->
+        <article class="group overflow-hidden rounded-3xl border border-stone-200 bg-stone-50 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=85"
+                 alt="Creamy truffle pasta" class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105" />
+            <span class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-orange-700 shadow">
+              BESTSELLER
+            </span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="font-display text-2xl font-bold">Truffle Pasta</h3>
+              <span class="shrink-0 rounded-full bg-orange-100 px-3 py-1 text-sm font-bold text-orange-700">₹349</span>
+            </div>
+            <p class="mt-3 text-sm leading-6 text-stone-600">
+              Creamy parmesan sauce, wild mushrooms, truffle oil and fresh herbs.
+            </p>
+            <button class="mt-5 w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-bold text-white transition duration-300 hover:bg-orange-600 hover:shadow-lg">
+              Order Now
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="group overflow-hidden rounded-3xl border border-stone-200 bg-stone-50 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=85"
+                 alt="Fresh artisan pizza" class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105" />
+            <span class="absolute left-4 top-4 rounded-full bg-stone-900/90 px-3 py-1 text-xs font-bold text-white shadow">
+              CHEF'S PICK
+            </span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="font-display text-2xl font-bold">Garden Pizza</h3>
+              <span class="shrink-0 rounded-full bg-orange-100 px-3 py-1 text-sm font-bold text-orange-700">₹299</span>
+            </div>
+            <p class="mt-3 text-sm leading-6 text-stone-600">
+              Stone-baked crust, mozzarella, roasted peppers, basil and tomato.
+            </p>
+            <button class="mt-5 w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-bold text-white transition duration-300 hover:bg-orange-600 hover:shadow-lg">
+              Order Now
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="group overflow-hidden rounded-3xl border border-stone-200 bg-stone-50 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85"
+                 alt="Healthy Buddha bowl" class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105" />
+            <span class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-green-700 shadow">
+              HEALTHY
+            </span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="font-display text-2xl font-bold">Green Bowl</h3>
+              <span class="shrink-0 rounded-full bg-orange-100 px-3 py-1 text-sm font-bold text-orange-700">₹249</span>
+            </div>
+            <p class="mt-3 text-sm leading-6 text-stone-600">
+              Quinoa, avocado, greens, chickpeas, roasted vegetables and tahini.
+            </p>
+            <button class="mt-5 w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-bold text-white transition duration-300 hover:bg-orange-600 hover:shadow-lg">
+              Order Now
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="group overflow-hidden rounded-3xl border border-stone-200 bg-stone-50 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85"
+                 alt="Fresh vegetable curry" class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="font-display text-2xl font-bold">House Curry</h3>
+              <span class="shrink-0 rounded-full bg-orange-100 px-3 py-1 text-sm font-bold text-orange-700">₹279</span>
+            </div>
+            <p class="mt-3 text-sm leading-6 text-stone-600">
+              Slow-cooked seasonal vegetables in a fragrant house spice blend.
+            </p>
+            <button class="mt-5 w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-bold text-white transition duration-300 hover:bg-orange-600 hover:shadow-lg">
+              Order Now
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="group overflow-hidden rounded-3xl border border-stone-200 bg-stone-50 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=900&q=85"
+                 alt="Restaurant signature meal" class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="font-display text-2xl font-bold">Savor Plate</h3>
+              <span class="shrink-0 rounded-full bg-orange-100 px-3 py-1 text-sm font-bold text-orange-700">₹399</span>
+            </div>
+            <p class="mt-3 text-sm leading-6 text-stone-600">
+              Our signature combination of seasonal sides, grains and chef-made sauces.
+            </p>
+            <button class="mt-5 w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-bold text-white transition duration-300 hover:bg-orange-600 hover:shadow-lg">
+              Order Now
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="group overflow-hidden rounded-3xl border border-stone-200 bg-stone-50 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=85"
+                 alt="Chocolate dessert" class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105" />
+            <span class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-pink-700 shadow">
+              SWEET FINALE
+            </span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="font-display text-2xl font-bold">Chocolate Cloud</h3>
+              <span class="shrink-0 rounded-full bg-orange-100 px-3 py-1 text-sm font-bold text-orange-700">₹199</span>
+            </div>
+            <p class="mt-3 text-sm leading-6 text-stone-600">
+              Silky chocolate mousse, berry compote and a crisp cocoa crumble.
+            </p>
+            <button class="mt-5 w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-bold text-white transition duration-300 hover:bg-orange-600 hover:shadow-lg">
+              Order Now
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Story / CTA -->
+  <section id="story" class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <div class="grid overflow-hidden rounded-[2rem] bg-stone-900 lg:grid-cols-2">
+      <div class="p-8 text-white sm:p-12 lg:p-16">
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-orange-400">Why Savoria?</p>
+        <h2 class="mt-3 font-display text-4xl font-bold sm:text-5xl">
+          Simple ingredients. Big flavor.
+        </h2>
+        <p class="mt-6 max-w-xl leading-7 text-stone-300">
+          We believe memorable food does not need to be complicated. Our kitchen
+          focuses on seasonal produce, bold flavors and recipes made fresh for you.
+        </p>
+        <a href="#contact"
+           class="mt-8 inline-block rounded-full bg-orange-600 px-6 py-3 font-semibold text-white transition hover:bg-orange-500">
+          Visit Us
+        </a>
+      </div>
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85"
+           alt="Warm restaurant interior"
+           class="h-full min-h-[320px] w-full object-cover" />
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="border-t border-stone-200 bg-stone-50">
+    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+      <p>© 2026 Savoria Restaurant. Made with fresh ideas.</p>
+      <div class="flex gap-5">
+        <a href="#" class="transition hover:text-orange-600">Instagram</a>
+        <a href="#" class="transition hover:text-orange-600">Contact</a>
+        <a href="#menu" class="transition hover:text-orange-600">Menu ↑</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
