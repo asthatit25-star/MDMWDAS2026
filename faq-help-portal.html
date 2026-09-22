@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IT Department Help Desk — FAQ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c2b2d;
+    --paper:#f6f3ec;
+    --card:#ffffff;
+    --rail:#2f5d55;
+    --rail-dim:#c8d8d3;
+    --accent:#c7622a;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#eef2f0; --paper:#12201f; --card:#182a28; --rail:#7fb3a6; --rail-dim:#324b47; --accent:#e08a55;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#eef2f0; --paper:#12201f; --card:#182a28; --rail:#7fb3a6; --rail-dim:#324b47; --accent:#e08a55;
+  }
+  html,body{background:var(--paper); color:var(--ink);}
+  body{font-family:'IBM Plex Sans', sans-serif;}
+  h1,h2,.serif{font-family:'Source Serif 4', serif;}
+  .q-btn:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+  .panel{
+    display:grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .28s ease;
+  }
+  .panel > div{overflow:hidden;}
+  .panel.open{grid-template-rows: 1fr;}
+  .chev{transition: transform .25s ease;}
+  .open-chev{transform: rotate(45deg);}
+  @media (prefers-reduced-motion: reduce){
+    .panel, .chev{transition:none;}
+  }
+</style>
+</head>
+<body class="min-h-screen">
+
+<header class="border-b" style="border-color:var(--rail-dim)">
+  <div class="max-w-3xl mx-auto px-6 py-10">
+    <p class="text-sm tracking-wide" style="color:var(--rail)">IT Department · Student Help Desk</p>
+    <h1 class="text-3xl md:text-4xl mt-2" style="color:var(--ink)">Frequently Asked Questions</h1>
+    <p class="mt-3 max-w-xl" style="color:var(--ink); opacity:.75">
+      Answers to the questions students ask most. Tap a question to open it — tap again to close it.
+    </p>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-6 py-10">
+  <div id="faq-list" class="flex flex-col gap-3"></div>
+</main>
+
+<footer class="max-w-3xl mx-auto px-6 pb-12 text-sm" style="color:var(--ink); opacity:.6">
+  Didn't find your answer? Visit the department office, Room 214, Mon–Fri 9 AM–4 PM.
+</footer>
+
+<script>
+  const faqs = [
+    {
+      q: "How do I reset my student portal password?",
+      a: "Go to the portal login page and click \"Forgot Password.\" Enter your registered college email ID — a reset link is sent within a few minutes. If you don't receive it, check your spam folder or contact the IT help desk in Room 214."
+    },
+    {
+      q: "Where can I find my semester timetable?",
+      a: "Timetables are posted under the \"Academics\" tab of the student portal, updated at the start of every semester. A physical copy is also displayed on the department notice board."
+    },
+    {
+      q: "How do I apply for a re-evaluation of my exam paper?",
+      a: "Submit a re-evaluation request through the portal's \"Examination\" section within seven days of result declaration, along with the prescribed fee. The department will notify you once the revised result is available."
+    },
+    {
+      q: "Who do I contact for lab equipment issues?",
+      a: "Report faulty systems or equipment to the lab assistant on duty, or log a ticket through the \"Support\" tab on the portal. Urgent issues during lab hours can be reported directly to the faculty in charge."
+    },
+    {
+      q: "How do I get a bonafide or transfer certificate?",
+      a: "Fill out the certificate request form available at the department office or on the portal under \"Documents.\" Processing usually takes 3–5 working days; you'll be notified by email when it's ready for collection."
+    },
+    {
+      q: "What is the minimum attendance required for exams?",
+      a: "Students must maintain at least 75% attendance in each subject to be eligible to sit for semester exams. Attendance shortages can be checked anytime under the \"Attendance\" tab of the portal."
+    }
+  ];
+
+  const list = document.getElementById('faq-list');
+
+  faqs.forEach((item, i) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'rounded-lg border overflow-hidden';
+    wrapper.style.background = 'var(--card)';
+    wrapper.style.borderColor = 'var(--rail-dim)';
+
+    wrapper.innerHTML = `
+      <button class="q-btn w-full flex items-center justify-between gap-4 text-left px-5 py-4"
+              aria-expanded="false" aria-controls="panel-${i}">
+        <span class="serif text-lg" style="color:var(--ink)">${item.q}</span>
+        <span class="chev shrink-0 text-2xl leading-none" style="color:var(--accent)">+</span>
+      </button>
+      <div class="panel" id="panel-${i}">
+        <div>
+          <p class="px-5 pb-5 leading-relaxed" style="color:var(--ink); opacity:.85">${item.a}</p>
+        </div>
+      </div>
+    `;
+
+    const btn = wrapper.querySelector('.q-btn');
+    const panel = wrapper.querySelector('.panel');
+    const chev = wrapper.querySelector('.chev');
+
+    btn.addEventListener('click', () => {
+      const isOpen = panel.classList.contains('open');
+
+      // close any other open panel (accordion behavior)
+      document.querySelectorAll('.panel.open').forEach(p => {
+        if (p !== panel) {
+          p.classList.remove('open');
+          p.previousElementSibling.setAttribute('aria-expanded', 'false');
+          p.previousElementSibling.querySelector('.chev').classList.remove('open-chev');
+        }
+      });
+
+      panel.classList.toggle('open', !isOpen);
+      chev.classList.toggle('open-chev', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    list.appendChild(wrapper);
+  });
+</script>
+</body>
+</html>
