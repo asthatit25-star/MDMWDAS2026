@@ -1,0 +1,494 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Personal To-Do List</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: "#6366f1"
+                }
+            }
+        }
+    }
+</script>
+
+</head> <body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+<!-- Header -->
+<header class="bg-indigo-600 text-white shadow-lg">
+    <div class="max-w-5xl mx-auto px-4 py-6">
+        <h1 class="text-3xl md:text-4xl font-bold">
+            Personal To-Do List
+        </h1>
+        <p class="mt-2 text-indigo-100">
+            Organize your academic and personal tasks efficiently.
+        </p>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-5xl mx-auto px-4 py-8">
+
+    <!-- Add Task Card -->
+    <section class="bg-white rounded-2xl shadow-md p-5 md:p-6 mb-6">
+
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+            Add a New Task
+        </h2>
+
+        <div class="flex flex-col md:flex-row gap-3">
+
+            <input
+                type="text"
+                id="taskInput"
+                placeholder="Enter your task..."
+                class="flex-1 px-4 py-3 border border-gray-300 rounded-xl
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500
+                       focus:border-transparent"
+            >
+
+            <select
+                id="categoryInput"
+                class="px-4 py-3 border border-gray-300 rounded-xl
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+                <option value="Academic">Academic</option>
+                <option value="Personal">Personal</option>
+            </select>
+
+            <button
+                id="addTaskBtn"
+                class="px-6 py-3 bg-indigo-600 text-white font-semibold
+                       rounded-xl hover:bg-indigo-700 transition duration-200
+                       shadow-sm"
+            >
+                + Add Task
+            </button>
+
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+
+        <div class="bg-white rounded-2xl shadow-md p-5 border-l-4 border-indigo-500">
+            <p class="text-gray-500 text-sm">Total Tasks</p>
+            <p id="totalCount" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-md p-5 border-l-4 border-yellow-500">
+            <p class="text-gray-500 text-sm">Active Tasks</p>
+            <p id="activeCount" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-md p-5 border-l-4 border-green-500">
+            <p class="text-gray-500 text-sm">Completed</p>
+            <p id="completedCount" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+        </div>
+
+    </section>
+
+    <!-- Task List -->
+    <section class="bg-white rounded-2xl shadow-md p-5 md:p-6">
+
+        <!-- Filters -->
+        <div class="flex flex-col sm:flex-row sm:items-center
+                    sm:justify-between gap-4 mb-5">
+
+            <h2 class="text-xl font-semibold text-gray-800">
+                My Tasks
+            </h2>
+
+            <div class="flex gap-2">
+                <button
+                    class="filter-btn px-4 py-2 rounded-lg bg-indigo-600 text-white
+                           text-sm font-medium"
+                    data-filter="all"
+                >
+                    All
+                </button>
+
+                <button
+                    class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700
+                           hover:bg-gray-200 text-sm font-medium"
+                    data-filter="active"
+                >
+                    Active
+                </button>
+
+                <button
+                    class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700
+                           hover:bg-gray-200 text-sm font-medium"
+                    data-filter="completed"
+                >
+                    Completed
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Dynamic Task Container -->
+        <div id="taskList" class="space-y-3">
+            <!-- Tasks will be inserted here using JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyMessage" class="text-center py-12">
+            <div class="text-5xl mb-3">📝</div>
+            <h3 class="text-lg font-semibold text-gray-700">
+                No tasks yet
+            </h3>
+            <p class="text-gray-500 mt-1">
+                Add your first task to get started.
+            </p>
+        </div>
+
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="text-center py-6 text-gray-500 text-sm">
+    Personal To-Do List • Built with HTML, Tailwind CSS & JavaScript
+</footer>
+
+
+<script>
+
+    // -----------------------------
+    // Application State
+    // -----------------------------
+
+    let tasks = JSON.parse(localStorage.getItem("todoTasks")) || [];
+
+    let currentFilter = "all";
+
+
+    // -----------------------------
+    // DOM Elements
+    // -----------------------------
+
+    const taskInput = document.getElementById("taskInput");
+    const categoryInput = document.getElementById("categoryInput");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+    const emptyMessage = document.getElementById("emptyMessage");
+
+    const totalCount = document.getElementById("totalCount");
+    const activeCount = document.getElementById("activeCount");
+    const completedCount = document.getElementById("completedCount");
+
+    const filterButtons = document.querySelectorAll(".filter-btn");
+
+
+    // -----------------------------
+    // Save Tasks to Local Storage
+    // -----------------------------
+
+    function saveTasks() {
+        localStorage.setItem("todoTasks", JSON.stringify(tasks));
+    }
+
+
+    // -----------------------------
+    // Add Task
+    // -----------------------------
+
+    function addTask() {
+
+        const taskText = taskInput.value.trim();
+
+        if (taskText === "") {
+            alert("Please enter a task.");
+            taskInput.focus();
+            return;
+        }
+
+        const newTask = {
+            id: Date.now(),
+            text: taskText,
+            category: categoryInput.value,
+            completed: false
+        };
+
+        tasks.push(newTask);
+
+        saveTasks();
+
+        taskInput.value = "";
+        categoryInput.value = "Academic";
+
+        renderTasks();
+
+        taskInput.focus();
+    }
+
+
+    // -----------------------------
+    // Toggle Task Completion
+    // -----------------------------
+
+    function toggleTask(id) {
+
+        tasks = tasks.map(task => {
+
+            if (task.id === id) {
+                return {
+                    ...task,
+                    completed: !task.completed
+                };
+            }
+
+            return task;
+        });
+
+        saveTasks();
+        renderTasks();
+    }
+
+
+    // -----------------------------
+    // Delete Task
+    // -----------------------------
+
+    function deleteTask(id) {
+
+        tasks = tasks.filter(task => task.id !== id);
+
+        saveTasks();
+        renderTasks();
+    }
+
+
+    // -----------------------------
+    // Filter Tasks
+    // -----------------------------
+
+    function getFilteredTasks() {
+
+        if (currentFilter === "active") {
+            return tasks.filter(task => !task.completed);
+        }
+
+        if (currentFilter === "completed") {
+            return tasks.filter(task => task.completed);
+        }
+
+        return tasks;
+    }
+
+
+    // -----------------------------
+    // Render Tasks
+    // -----------------------------
+
+    function renderTasks() {
+
+        taskList.innerHTML = "";
+
+        const filteredTasks = getFilteredTasks();
+
+        if (filteredTasks.length === 0) {
+            emptyMessage.classList.remove("hidden");
+        } else {
+            emptyMessage.classList.add("hidden");
+        }
+
+
+        filteredTasks.forEach(task => {
+
+            const taskElement = document.createElement("div");
+
+            taskElement.className =
+                "flex items-center gap-3 p-4 border border-gray-200 " +
+                "rounded-xl hover:shadow-sm transition bg-gray-50";
+
+
+            // Checkbox
+            const checkbox = document.createElement("input");
+
+            checkbox.type = "checkbox";
+            checkbox.checked = task.completed;
+
+            checkbox.className =
+                "w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer";
+
+            checkbox.addEventListener("change", () => {
+                toggleTask(task.id);
+            });
+
+
+            // Task Content
+            const content = document.createElement("div");
+
+            content.className = "flex-1 min-w-0";
+
+
+            // Task Name
+            const taskName = document.createElement("p");
+
+            taskName.textContent = task.text;
+
+            taskName.className =
+                "font-medium text-gray-800 break-words";
+
+
+            if (task.completed) {
+                taskName.classList.add(
+                    "line-through",
+                    "text-gray-400"
+                );
+            }
+
+
+            // Category Badge
+            const category = document.createElement("span");
+
+            category.textContent = task.category;
+
+            category.className =
+                "inline-block mt-1 px-2 py-1 text-xs rounded-full";
+
+
+            if (task.category === "Academic") {
+
+                category.classList.add(
+                    "bg-blue-100",
+                    "text-blue-700"
+                );
+
+            } else {
+
+                category.classList.add(
+                    "bg-purple-100",
+                    "text-purple-700"
+                );
+            }
+
+
+            content.appendChild(taskName);
+            content.appendChild(category);
+
+
+            // Delete Button
+            const deleteButton = document.createElement("button");
+
+            deleteButton.innerHTML = "🗑️";
+
+            deleteButton.title = "Delete task";
+
+            deleteButton.className =
+                "p-2 rounded-lg hover:bg-red-100 " +
+                "text-red-500 transition";
+
+            deleteButton.addEventListener("click", () => {
+
+                deleteTask(task.id);
+
+            });
+
+
+            taskElement.appendChild(checkbox);
+            taskElement.appendChild(content);
+            taskElement.appendChild(deleteButton);
+
+            taskList.appendChild(taskElement);
+
+        });
+
+
+        updateCounts();
+    }
+
+
+    // -----------------------------
+    // Update Task Counts
+    // -----------------------------
+
+    function updateCounts() {
+
+        const total = tasks.length;
+
+        const completed = tasks.filter(
+            task => task.completed
+        ).length;
+
+        const active = total - completed;
+
+        totalCount.textContent = total;
+        activeCount.textContent = active;
+        completedCount.textContent = completed;
+    }
+
+
+    // -----------------------------
+    // Filter Buttons
+    // -----------------------------
+
+    filterButtons.forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            currentFilter = button.dataset.filter;
+
+            filterButtons.forEach(btn => {
+
+                btn.classList.remove(
+                    "bg-indigo-600",
+                    "text-white"
+                );
+
+                btn.classList.add(
+                    "bg-gray-100",
+                    "text-gray-700"
+                );
+            });
+
+
+            button.classList.remove(
+                "bg-gray-100",
+                "text-gray-700"
+            );
+
+            button.classList.add(
+                "bg-indigo-600",
+                "text-white"
+            );
+
+            renderTasks();
+
+        });
+
+    });
+
+
+    // -----------------------------
+    // Button Event
+    // -----------------------------
+
+    addTaskBtn.addEventListener("click", addTask);
+
+
+    // -----------------------------
+    // Enter Key Support
+    // -----------------------------
+
+    taskInput.addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+            addTask();
+        }
+
+    });
+
+
+    // -----------------------------
+    // Initial Render
+    // -----------------------------
+
+    renderTasks();
+
+</script>
+
+</body> </html>
