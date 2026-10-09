@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leftover Rescue</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .display { font-family: 'Fraunces', serif; }
+  </style>
+</head>
+<body class="bg-emerald-50 text-stone-800 min-h-screen">
+
+  <!-- HEADER -->
+  <header class="bg-emerald-800 text-emerald-50">
+    <div class="max-w-5xl mx-auto px-4 py-10 sm:py-14">
+      <h1 class="display text-4xl sm:text-6xl font-extrabold leading-tight">Leftover Rescue</h1>
+      <p class="mt-3 max-w-xl text-emerald-100 text-lg">
+        Tap what is sitting in your fridge. We'll show what you can cook before it goes to waste.
+      </p>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 grid gap-8 lg:grid-cols-[320px_1fr]">
+
+    <!-- INGREDIENT PICKER -->
+    <section aria-labelledby="pick-title" class="lg:sticky lg:top-6 self-start">
+      <div class="flex items-center justify-between mb-3">
+        <h2 id="pick-title" class="display text-2xl font-semibold">Your fridge</h2>
+        <button id="clearBtn" class="text-sm text-emerald-800 underline hover:text-emerald-600">Clear all</button>
+      </div>
+      <div id="chips" class="flex flex-wrap gap-2"></div>
+      <p id="count" class="mt-4 text-sm text-stone-600"></p>
+
+      <label class="mt-6 flex items-center gap-2 text-sm font-medium cursor-pointer">
+        <input id="savedOnly" type="checkbox" class="h-4 w-4 accent-emerald-700" />
+        Show only saved recipes
+      </label>
+    </section>
+
+    <!-- RECIPES -->
+    <section aria-labelledby="rec-title">
+      <h2 id="rec-title" class="display text-2xl font-semibold mb-3">What you can cook</h2>
+      <div id="results" class="grid gap-4 sm:grid-cols-2"></div>
+    </section>
+  </main>
+
+  <footer class="text-center text-sm text-stone-500 py-8">
+    Less waste, better dinners. Saved recipes are kept in your browser.
+  </footer>
+
+<script>
+  // ---------- DATA ----------
+  const ingredients = ["Rice","Egg","Tomato","Onion","Potato","Bread","Cheese","Milk",
+                       "Spinach","Paneer","Chapati","Banana","Curd","Capsicum"];
+
+  const recipes = [
+    { id: 1, name: "Egg Fried Rice", time: 15, need: ["Rice","Egg","Onion"] },
+    { id: 2, name: "Tomato Cheese Toast", time: 10, need: ["Bread","Tomato","Cheese"] },
+    { id: 3, name: "Aloo Tikki", time: 25, need: ["Potato","Onion","Bread"] },
+    { id: 4, name: "Palak Paneer", time: 30, need: ["Spinach","Paneer","Onion","Tomato"] },
+    { id: 5, name: "Banana Milkshake", time: 5, need: ["Banana","Milk"] },
+    { id: 6, name: "Curd Rice", time: 10, need: ["Rice","Curd"] },
+    { id: 7, name: "Chapati Roll", time: 15, need: ["Chapati","Capsicum","Paneer"] },
+    { id: 8, name: "Veg Omelette", time: 10, need: ["Egg","Onion","Tomato","Capsicum"] },
+    { id: 9, name: "Cheesy Potato Bake", time: 35, need: ["Potato","Cheese","Milk"] },
+    { id: 10, name: "French Toast", time: 12, need: ["Bread","Egg","Milk"] }
+  ];
+
+  // ---------- STATE ----------
+  let selected = new Set();
+  let saved = new Set();
+  try { saved = new Set(JSON.parse(localStorage.getItem("savedRecipes") || "[]")); } catch (e) {}
+
+  const chipsEl = document.getElementById("chips");
+  const resultsEl = document.getElementById("results");
+  const countEl = document.getElementById("count");
+  const savedOnlyEl = document.getElementById("savedOnly");
+
+  // ---------- RENDER CHIPS ----------
+  function renderChips() {
+    chipsEl.innerHTML = "";
+    ingredients.forEach(name => {
+      const on = selected.has(name);
+      const b = document.createElement("button");
+      b.textContent = name;
+      b.setAttribute("aria-pressed", on);
+      b.className = "px-3 py-1.5 rounded-full border text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 " +
+        (on ? "bg-emerald-700 text-white border-emerald-700"
+            : "bg-white text-stone-700 border-stone-300 hover:border-emerald-600");
+      b.onclick = () => { on ? selected.delete(name) : selected.add(name); update(); };
+      chipsEl.appendChild(b);
+    });
+  }
+
+  // ---------- RENDER RECIPES ----------
+  function renderRecipes() {
+    let list = recipes.map(r => {
+      const have = r.need.filter(i => selected.has(i));
+      const missing = r.need.filter(i => !selected.has(i));
+      return { ...r, have, missing, pct: Math.round(have.length / r.need.length * 100) };
+    });
+
+    if (savedOnlyEl.checked) list = list.filter(r => saved.has(r.id));
+    if (selected.size > 0) list = list.filter(r => r.have.length > 0);
+    list.sort((a, b) => b.pct - a.pct || a.time - b.time);
+
+    resultsEl.innerHTML = "";
+    if (list.length === 0) {
+      resultsEl.innerHTML = `<p class="sm:col-span-2 bg-white border border-dashed border-stone-300 rounded-xl p-6 text-stone-600">
+        ${savedOnlyEl.checked ? "No saved recipes yet. Save one with the heart button." : "No recipe matches yet. Tap an ingredient on the left."}</p>`;
+      return;
+    }
+
+    list.forEach(r => {
+      const ready = r.pct === 100;
+      const card = document.createElement("article");
+      card.className = "bg-white rounded-xl border p-5 flex flex-col " + (ready ? "border-emerald-600 ring-1 ring-emerald-600" : "border-stone-200");
+      card.innerHTML = `
+        <div class="flex justify-between items-start gap-2">
+          <h3 class="display text-xl font-semibold">${r.name}</h3>
+          <button data-id="${r.id}" aria-label="Save ${r.name}" class="save text-2xl leading-none ${saved.has(r.id) ? "text-rose-500" : "text-stone-300 hover:text-rose-400"}">${saved.has(r.id) ? "♥" : "♡"}</button>
+        </div>
+        <p class="text-sm text-stone-500 mt-1">${r.time} min</p>
+        <div class="mt-3 h-2 rounded-full bg-stone-100 overflow-hidden">
+          <div class="h-full ${ready ? "bg-emerald-600" : "bg-amber-400"} transition-all duration-500" style="width:${r.pct}%"></div>
+        </div>
+        <p class="mt-2 text-sm font-medium">${ready ? "You have everything" : r.pct + "% of ingredients ready"}</p>
+        ${r.missing.length ? `<p class="mt-1 text-sm text-stone-600">Still need: ${r.missing.join(", ")}</p>` : ""}
+      `;
+      resultsEl.appendChild(card);
+    });
+
+    document.querySelectorAll(".save").forEach(btn => {
+      btn.onclick = () => {
+        const id = Number(btn.dataset.id);
+        saved.has(id) ? saved.delete(id) : saved.add(id);
+        try { localStorage.setItem("savedRecipes", JSON.stringify([...saved])); } catch (e) {}
+        renderRecipes();
+      };
+    });
+  }
+
+  function update() {
+    renderChips();
+    renderRecipes();
+    countEl.textContent = selected.size === 0
+      ? "Nothing selected yet."
+      : `${selected.size} ingredient${selected.size > 1 ? "s" : ""} selected.`;
+  }
+
+  document.getElementById("clearBtn").onclick = () => { selected.clear(); update(); };
+  savedOnlyEl.onchange = renderRecipes;
+
+  update();
+</script>
+</body>
+</html>
